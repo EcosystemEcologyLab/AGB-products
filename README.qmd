@@ -22,3 +22,32 @@ Preprocessing steps to be done:
 -   ❔Rasterize vector products
 
 -   ❔Merge tiles into a single file
+
+## Example
+
+In `R/` there is a collection of `clean_*()` functions defined.
+One of the simpler ones is for the Xu et al. dataset:
+
+``` r
+clean_xu <- function(input = "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif", 
+                     output = "AGB_cleaned/xu.tif",
+                     root = "/Volumes/moore/") {
+  # Xu
+  input_path <- fs::path(root, input)
+  output_path <- fs::path(root, output)
+  xu_agb_raw <- terra::rast(input_path) 
+  #conversion from MgC/ha to Mg/ha
+  xu_agb <- xu_agb_raw * 2.2 
+  units(xu_agb) <- "Mg/ha"
+  names(xu_agb) <- 2000:2019
+  varnames(xu_agb) <- "AGB"
+  
+  # Write to COG
+  terra::writeRaster(xu_agb, output_path, filetype = "COG", overwrite = TRUE)
+  return(output_path)
+}
+```
+
+If you have snow mounted to `/Volumes/moore/` then all you need to do is run `clean_xu()` to read in the downloaded raw data, do the processing, and save it out as a COG to `AGB_cleaned/xu.tif`.
+
+Eventually, these functions may become part of a `targets` pipeline that will only re-run the pre-processing function if there have been changes in the function or the raw data file(s).
