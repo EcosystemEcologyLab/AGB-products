@@ -13,7 +13,7 @@ Preprocessing steps to be done:
 
     -   If they represent a time range, use the time range (e.g. `"2005-2010"` or `"2009, 2012-2014"`)
 
-    -   If they are something other than AGB, append that to the year (e.g. `"2005_SD"` , `"2005_MEAN"`
+    -   ❔If they are something other than AGB, append that to the year (e.g. `"2005_SD"` , `"2005_MEAN"`
 
 -   Convert to units of Mg/ha
 
@@ -49,5 +49,10 @@ clean_xu <- function(input = "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif",
 ```
 
 If you have snow mounted to `/Volumes/moore/` then all you need to do is run `clean_xu()` to read in the downloaded raw data, do the processing, and save it out as a COG to `AGB_cleaned/xu.tif`.
+
+::: callout-note
+This will actually write two files, `xu.tiff` and a "sidecar" file `xu.tiff.aux.json` containing some metadata (just the units in this example).
+`terra::rast("path/to/xu.tiff")` will automatically also read in the sidecar file if it is in the same directory.
+:::
 
 Eventually, these functions may become part of a `targets` pipeline that will only re-run the pre-processing function if there have been changes in the function or the raw data file(s).
