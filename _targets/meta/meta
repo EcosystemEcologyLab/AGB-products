@@ -1,0 +1,16 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|2294468a0a47265a|||||||||||||||
+chopping|stem|ce091b7235a10481|00a969d092d74810|26aa7e899fc065df|1765117810|/Volumes/moore/AGB_cleaned/chopping/chopping_2000-2021.tif|t19892.7423681452s|5544bf43298ef895|373095339|file|local|vector|||520.417||
+chopping_file|stem|c0ab9431dff2f17a|60eff62ca0d6c6d3|dececf1ff62a2e92|1531742038|/Volumes/moore/Chopping/MISR_agb_estimates_20002021.tif|t19660.790404686s|84b18c3a1f91ba64|375410359|file|local|vector|||2.732||
+clean_chopping|function|9a58911876cdd88a|||||||||||||||
+clean_esa|function|37fde0bbc47aba60|||||||||||||||
+clean_liu|function|eb6e982cba762e77|||||||||||||||
+clean_xu|function|a207d4b8b7b080eb|||||||||||||||
+esa|stem||a946f4754584eb83|56bd6b71cfc95bc1|-1194595524|esa.cci_N40W110_2010.2017-2020.tif*esa.cci_N40W120_2010.2017-2020.tif*esa.cci_N40W130_2010.2017-2020.tif*esa.cci_N50W120_2010.2017-2020.tif*esa.cci_N50W130_2010.2017-2020.tif|t19892.7742150545s||0|file|local|vector|||||_paths_ missing files esa.cci_N40W110_2010.20172020.tif, esa.cci_N40W120_2010.20172020.tif, esa.cci_N40W130_2010.20172020.tif, esa.cci_N50W120_2010.20172020.tif, esa.cci_N50W130_2010.20172020.tif
+esa_dir|stem|a99831b88e4b4c1f|7652431d9eece2b1|dececf1ff62a2e92|1058752195|/Volumes/moore/ESA_CCI|t19837.9115160422s|f5b6398a6d61fb03|1009842592|file|local|vector|||2.763||
+liu|stem|ac6858b5c54adaea|faaa27eadf637ad4|a9f3608d0fa11fce|138665892|/Volumes/moore/AGB_cleaned/liu/liu_1993-2012.tif|t19892.7354546678s|b16dd833663056d9|21427376|file|local|vector|||28.182||
+liu_file|stem|33fac287f5b13085|82f1416a92e23f11|dececf1ff62a2e92|2044203798|/Volumes/moore/Liu/Aboveground_Carbon_1993_2012.nc|t18529.7351398812s|a1a0b485b1c8ba3c|33353704|file|local|vector|||3.24||
+read_clean_ltgnn|function|0c5f85a0b61ce1d5|||||||||||||||
+root|object|07a05b92cb3e069c|||||||||||||||
+xu|stem|d0298ebc0454d7db|08eae4eafff3984a|c513de3d9ec50dae|1275162653|/Volumes/moore/AGB_cleaned/xu/xu_2000-2029.tif|t19892.7346951217s|4ddf4c3a619936bd|150059567|file|local|vector|||154.162||
+xu_file|stem|a7d64b837bda5dbe|f599d18c4733f70b|dececf1ff62a2e92|1350703402|/Volumes/moore/Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif|t18870.8779712958s|a61668eef26cc354|114424129|file|local|vector|||3.015||

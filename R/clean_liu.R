@@ -1,24 +1,20 @@
 #' Read Liu .nc file and convert to raster with correct projection and units
 #'
-#' @param input the raw file to read in, "Aboveground_Carbon_1993_2012.nc"
-#' @param output where to save the processed data including file extension
-#' @param root the "root" directory where the `input` and `output` paths are
-#'   relative to.  Default assumes you have the "snow" network drive mapped to
-#'   `/Volumes/moore/`, but the path may be elsewhere for your computer.
+#' @param input path to the raw file to read in, "Aboveground_Carbon_1993_2012.nc"
+#' @param output path to save the processed data including file extension
 #' 
 #' @examples
 #' clean_liu()
 #' 
 #' @return output path
 clean_liu = function(
-    input = "Liu/Aboveground_Carbon_1993_2012.nc",
-    output = "AGB_cleaned/liu.tif",
-    root = "/Volumes/moore/"
+    input = "/Volumes/moore/Liu/Aboveground_Carbon_1993_2012.nc",
+    output = "/Volumes/moore/AGB_cleaned/liu/liu_1993-2012.tif"
 ) {
-  input_path <- fs::path(root, input)
-  output_path <- fs::path(root, output)
+  # Create output dir if not already there
+  fs::dir_create(fs::path_dir(output))
   # Open Liu AGBc netCDF file
-  nc <- ncdf4::nc_open(input_path)
+  nc <- ncdf4::nc_open(input)
   #close the nc file when the function completes or if it gets interrupted
   on.exit(ncdf4::nc_close(nc))
   
@@ -46,6 +42,6 @@ clean_liu = function(
   terra::units(liu_agb) <-  "Mg/ha"
   
   # Write to COG
-  terra::writeRaster(liu_agb, output_path, filetype = "COG", overwrite = TRUE)
-  return(output_path)
+  terra::writeRaster(liu_agb, output, filetype = "COG", overwrite = TRUE)
+  output
 }

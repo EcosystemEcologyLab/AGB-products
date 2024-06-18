@@ -29,22 +29,24 @@ In `R/` there is a collection of `clean_*()` functions defined.
 One of the simpler ones is for the Xu et al. dataset:
 
 ``` r
-clean_xu <- function(input = "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif", 
-                     output = "AGB_cleaned/xu.tif",
-                     root = "/Volumes/moore/") {
-  # Xu
-  input_path <- fs::path(root, input)
-  output_path <- fs::path(root, output)
-  xu_agb_raw <- terra::rast(input_path) 
-  #conversion from MgC/ha to Mg/ha
+# Function has arguments for input and output path.  Input might be a directory in the case of multiple tiles
+clean_xu <- function(
+    input = "/Volumes/moore/Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif", 
+    output = "/Volumes/moore/AGB_cleaned/xu.tif"
+) {
+  # Read in file(s)
+  xu_agb_raw <- terra::rast(input) 
+  # Do any necessary conversions or subsetting
   xu_agb <- xu_agb_raw * 2.2 
+  # Add metadata including layer names
   units(xu_agb) <- "Mg/ha"
-  names(xu_agb) <- 2000:2019
   varnames(xu_agb) <- "AGB"
+  names(xu_agb) <- 2000:2019
   
   # Write to COG
-  terra::writeRaster(xu_agb, output_path, filetype = "COG", overwrite = TRUE)
-  return(output_path)
+  terra::writeRaster(xu_agb, output, filetype = "COG", overwrite = TRUE)
+  # Return output path
+  output
 }
 ```
 
