@@ -5,25 +5,21 @@ editor: visual
 
 The goal of this repository is to do some light pre-processing to above-ground biomass data products and save them to the "snow" server in a common format.
 
-Preprocessing steps to be done:
+Pre-processing steps currently taken:
 
 -   Name all layers appropriately
-
     -   If they are years, use the year (e.g. `"2005"`)
-
-    -   If they represent a time range, use the time range (e.g. `"2005-2010"` or `"2009, 2012-2014"`)
-
-    -   ❔If they are something other than AGB, append that to the year (e.g. `"2005_SD"` , `"2005_MEAN"`
-
+    -   If they represent a time range, use the time range (e.g. `"2005-2010 mean"` or `"2009, 2012-2014 mean"`)
 -   Convert to units of Mg/ha
+-   Rasterize vector products
+-   Save as cloud optimized geotiff(s)
 
--   ❔Project to the same CRS
+Other possible steps that could be added in the future:
 
--   ❔Rasterize vector products
+-   Re-project to a common CRS
+-   Include layers besides AGB. For example, some products have layers with standard deviation or quality control flags that are currently removed during this pre-processing.
 
--   ❔Merge tiles into a single file
-
-## Example
+## Example Function
 
 In `R/` there is a collection of `clean_*()` functions defined.
 One of the simpler ones is for the Xu et al. dataset:
@@ -32,7 +28,7 @@ One of the simpler ones is for the Xu et al. dataset:
 # Function has arguments for input and output path.  Input might be a directory in the case of multiple tiles
 clean_xu <- function(
     input = "/Volumes/moore/Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif", 
-    output = "/Volumes/moore/AGB_cleaned/xu.tif"
+    output = "/Volumes/moore/AGB_cleaned/xu/xu.tif"
 ) {
   # Read in file(s)
   xu_agb_raw <- terra::rast(input) 
@@ -57,4 +53,16 @@ This will actually write two files, `xu.tiff` and a "sidecar" file `xu.tiff.aux.
 `terra::rast("path/to/xu.tiff")` will automatically also read in the sidecar file if it is in the same directory.
 :::
 
-Eventually, these functions may become part of a `targets` pipeline that will only re-run the pre-processing function if there have been changes in the function or the raw data file(s).
+## Using `targets`
+
+These functions are set up to all be run as part of a `targets` pipeline using just the command `tar_make()`.
+The pipeline (defined in `_targets.R`) tracks both input and output files as well as the code in the `clean_*()` functions so if there are any changes (e.g. adding a new tile for the ESA CCI dataset), running `tar_make()` should automatically update the output data in the `AGB_cleaned/` folder on snow.
+
+## Setup with `renv`
+
+The R package dependencies for this repository are tracked with `renv`.
+When you first open this project, you'll be prompted to install the dependencies with `renv::restore()`.
+This will attempt to install the exact versions of all packages used.
+Sometimes, especially when a package needs to be built from source, this will fail.
+You have the option of turning off `renv` with `renv::deactivate(clean = TRUE)`, installing the most recent versions of required R packages (the ones in `_targets_packages.R`, and then re-initializing `renv` with `renv::init()`.
+However, note that changes in R packages could require you to update code in the cleaning functions or in `_targets.R`.
