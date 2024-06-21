@@ -22,7 +22,7 @@ clean_menlove <- function(input = "/Volumes/moore/Menlove/data/",
   
   units(menlove_rast) <- "Mg/ha"
   varnames(menlove_rast) <- "AGB"
-  names(menlove_rast) <- "2009-2019 mean live + dead"
+  names(menlove_rast) <- "2009-2019"
   
   # Write to COG
   terra::writeRaster(menlove_rast, output, filetype = "COG", overwrite = TRUE)

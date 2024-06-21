@@ -17,7 +17,7 @@ clean_gedi <- function(input = "/Volumes/moore/GEDI_L4B_v2.1/data/GEDI04_B_MW019
   gedi_agb <- terra::rast(input)
   
   units(gedi_agb) <- "Mg/ha"
-  names(gedi_agb) <- "2019-2023 mean"
+  names(gedi_agb) <- "2019-2023"
   varnames(gedi_agb) <- "AGB"
   
   #write to COG
