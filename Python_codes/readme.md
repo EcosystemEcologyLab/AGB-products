@@ -25,6 +25,7 @@ conda install gdal
 conda install scipy
 conda install netCDF4
 conda install matplotlib
+conda install finoa
 pip install lytools
 ```
 
