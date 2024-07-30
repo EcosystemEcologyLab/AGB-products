@@ -1,12 +1,12 @@
 ## Adding a new data product
 
 Currently, the raw files for data products are in folder in the `moore/` folder on the 'Snow' server (which you will need to get access to from Andy Honaker).
-On a mac, this mounts at `/Volumes/Projects/moore/`.
+On a mac, this mounts at `/Volumes/moore/`.
 Download the file or files for the data product to the root level of this directory.
 
 ## Data wrangling
 
-If the raw data is tiled (i.e. it comes as mutiple .tifs representing different geographic areas), create functions that work on a **single tile**.
+If the raw data is tiled (i.e. it comes as multiple .tifs representing different geographic areas), create functions that work on a **single tile**.
 Wrangling functions should do the following:
 
 1.  Take two arguments, `input` and `output` which are specified as full file paths
@@ -16,7 +16,7 @@ Wrangling functions should do the following:
 5.  Name layers after the year or years they represent
 6.  If input data is in vector format, rasterize to a reasonable resolution
 7.  Create the output directory if necessary
-8.  Write out as a cloud-optimized geotiff using the "COG" GDAL driver
+8.  Write out as a cloud-optimized GEOtiff using the "COG" GDAL driver
 9.  **Return the output file path if successful**
 
 Currently, we are not re-projecting data to a common CRS or merging tiles.
@@ -25,7 +25,7 @@ These steps are done in downstream workflows when necessary.
 ### Naming things
 
 For each data product, choose a unique short name that is all lowercase with no spaces (underscores are ok).
-The output path should be, e.g., `/Volumes/Projects/moore/<short_name>/<short_name>_1990-2000.tif` replacing the years with the range of that particular dataset.
+The output path should be, e.g., `/Volumes/moore/AGB_cleaned/<short_name>/<short_name>_1990-2000.tif` replacing the years with the range of that particular data product.
 If tiled, the output file name should be constructed to include some kind of tile identifier, ideally matching the raw data.
 E.g. `<short_name>_h01v10_1990-2000.tif`.
 
@@ -87,8 +87,6 @@ def clean_xu(input = "/Volumes/moore/Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif
     # conversion from MgC/ha to Mg/ha
     xu = xu * 2.2
     # add metadata
-    xu.attrs["units"] = "Mg/ha"
-    xu.attrs["varname"] = "AGB"
     xu.attrs["long_name"] = [str(i) for i in range(2000, 2019 + 1)]
 
     # Write out as COG and return out path
@@ -101,11 +99,12 @@ Place python scripts in `python/`
 ## Connecting it up to the workflow
 
 This repository uses the `targets` R package for workflow management.
-The entire pipeline can be run with the R command `targets::tar_make()`.
+The entire pipeline can be run with the R command `targets::tar_make()` and it will skip any steps that do not need to be re-run.
+Visualize the workflow with `targets::tar_glimpse()` or `targets::tar_visnetwork()`.
 
 To add your new function to the workflow, you'll have to edit `_targets.R` .
-Each step in the workflow is called a "target" and defined by a function that starts with `tar_` such as `tar_target()`.
-There are targets to track the input files, and targets that do the wrangling and track the output file paths for changes.
+Each step in the workflow is called a "target" and defined by a function that starts with `tar_` such as `tar_target()` or `tar_file_fast()`.
+There are targets to track the input files for changes, and targets that do the wrangling and track the output file paths for changes.
 
 ### If not tiled
 
