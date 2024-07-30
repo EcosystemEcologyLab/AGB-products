@@ -11,7 +11,7 @@ Wrangling functions should do the following:
 
 1.  Take two arguments, `input` and `output` which are specified as full file paths
 2.  Read in the raw data
-3.  Convert units if necessary to Mg/ha
+3.  Convert units to Mg/ha if necessary
 4.  If there are multiple years of data, they should be represented as layers
 5.  Name layers after the year or years they represent
 6.  If input data is in vector format, rasterize to a reasonable resolution
