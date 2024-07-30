@@ -135,6 +135,30 @@ tar_files(ltgnn_paths, fs::dir_ls(path(root, "LT_GNN"), glob = "\*.zip"), format
 tar_file_fast(ltgnn, clean_ltgnn(ltgnn_paths), pattern = map(ltgnn_paths))
 ```
 
+### Python functions
+
+Integrating python functions is trickier because they cannot be sourced at the top of `_targets.R` like the R functions because of the way `reticulate` works (python functions contain external pointers that are only valid in the current R session).
+Instead, one must create a target to track the python script for changes (so the code is re-run if changes are made to the function), and in the target that does the wrangling, source the python script target with `reticulate::source_python()`
+
+For example:
+
+``` r
+#track input file for changes
+tar_file_fast(xu_file, path(root, "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif")),
+
+#track python code for changes
+tar_file_fast(xu_py, "python/clean_xu.py"),
+
+#clean and save output
+tar_file_fast(
+  xu,
+  command = {
+    reticulate::source_python(xu_py)
+    clean_xu(xu_file)
+  }
+)
+```
+
 ## Running it
 
 Install all dependencies with `renv::restore()` (the `renv` package should install itself when you first open the R project).

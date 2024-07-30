@@ -19,13 +19,6 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 tar_source()
 
-# Source all python scripts that start with "clean_" to be accessible in R with reticulate::source_python()
-py_funs <- dir_ls("python", regexp = "clean_.+\\.py$")
-#for some reason lapply() doesn't work with source_python()
-for(i in seq_along(py_funs)) {
-  source_python(py_funs[i])
-}
-
 root <- "/Volumes/moore/"
 tar_plan(
   #track input files
