@@ -137,7 +137,7 @@ tar_file_fast(ltgnn, clean_ltgnn(ltgnn_paths), pattern = map(ltgnn_paths))
 
 ### Python functions
 
-Integrating python functions is trickier because they cannot be sourced at the top of `_targets.R` like the R functions because of the way `reticulate` works (python functions contain external pointers that are only valid in the current R session).
+Integrating python functions is trickier because they cannot be sourced at the top of `_targets.R` like the R functions because of the way `reticulate` works (translated python functions contain external pointers that are only valid in the current R session).
 Instead, one must create a target to track the python script for changes (so the code is re-run if changes are made to the function), and in the target that does the wrangling, source the python script target with `reticulate::source_python()`
 
 For example:
