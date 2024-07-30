@@ -7,6 +7,7 @@
 library(targets)
 library(tarchetypes)
 library(fs)
+library(reticulate)
 
 # Set target options:
 tar_option_set(
@@ -16,7 +17,9 @@ tar_option_set(
 
 # Run the R scripts in the R/ folder with your custom functions:
 tar_source()
-# tar_source("other_functions.R") # Source other scripts as needed.
+#TODO have this source all files that start with "clean_" and end in ".py"
+# source_python("python/clean_xu.py")
+
 root <- "/Volumes/moore/"
 tar_plan(
   #track input files
