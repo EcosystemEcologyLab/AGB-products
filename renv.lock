@@ -8,6 +8,11 @@
       }
     ]
   },
+  "Python": {
+    "Version": "3.12.3",
+    "Type": "virtualenv",
+    "Name": ".venv"
+  },
   "Packages": {
     "BH": {
       "Package": "BH",
@@ -248,7 +253,7 @@
     },
     "crew": {
       "Package": "crew",
-      "Version": "0.9.0",
+      "Version": "0.9.5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -270,7 +275,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "771993945c468c1eb98693c71640b268"
+      "Hash": "1498e9c5b0f2a644d7c4a8534c9d20fe"
     },
     "curl": {
       "Package": "curl",
@@ -682,14 +687,14 @@
     },
     "mirai": {
       "Package": "mirai",
-      "Version": "0.12.1",
+      "Version": "1.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "nanonext"
       ],
-      "Hash": "bd1a289ee0b2a824e6715b996bf949eb"
+      "Hash": "f8b0cda5304cad0b629e98c09aad5471"
     },
     "munsell": {
       "Package": "munsell",
@@ -704,13 +709,13 @@
     },
     "nanonext": {
       "Package": "nanonext",
-      "Version": "0.13.0",
+      "Version": "1.1.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "f813386668d4e86e6c70c080dbb3e9e2"
+      "Hash": "1f884ea35086b957409a9d351eaa2d9e"
     },
     "ncdf4": {
       "Package": "ncdf4",
@@ -935,13 +940,13 @@
     },
     "secretbase": {
       "Package": "secretbase",
-      "Version": "0.5.0",
+      "Version": "1.0.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "c476c18b22b21849c9f4d29b3cd720a5"
+      "Hash": "28495386ab3f1e83c237c6d519508fe7"
     },
     "shiny": {
       "Package": "shiny",
@@ -1050,16 +1055,16 @@
     },
     "tarchetypes": {
       "Package": "tarchetypes",
-      "Version": "0.7.12",
+      "Version": "0.9.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
-        "digest",
         "dplyr",
         "fs",
         "parallel",
         "rlang",
+        "secretbase",
         "targets",
         "tibble",
         "tidyselect",
@@ -1067,11 +1072,11 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "27cbcc70b864c0df53cd454f062ac581"
+      "Hash": "094a74cdaa048b727d52aebf4c80ed7a"
     },
     "targets": {
       "Package": "targets",
-      "Version": "1.7.0",
+      "Version": "1.7.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1095,7 +1100,7 @@
         "vctrs",
         "yaml"
       ],
-      "Hash": "27ee47827a89430be0d38b78c0cb8fb7"
+      "Hash": "d79b21ef513564351577d7064e1fc4dd"
     },
     "terra": {
       "Package": "terra",
