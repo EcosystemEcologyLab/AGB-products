@@ -9,7 +9,7 @@
 #' clean_xu()
 #'  
 clean_xu <- function(input = "/Volumes/moore/Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif", 
-                     output = "/Volumes/moore/AGB_cleaned/xu/xu_2000-2029.tif") {
+                     output = "/Volumes/moore/AGB_cleaned/xu/xu_2000-2019.tif") {
   # Create output dir (if not already there)
   fs::dir_create(fs::path_dir(output))
   # Read in data
