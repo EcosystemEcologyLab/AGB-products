@@ -19,7 +19,12 @@ tar_option_set(
 # Run the R scripts in the R/ folder with your custom functions:
 tar_source()
 
-root <- "/Volumes/moore/"
+#TODO detect OS and switch root automatically??
+#on mac:
+# root <- "/Volumes/moore/"
+#on windows vm:
+root <- "//snow.snrenet.arizona.edu/projects/moore"
+
 tar_plan(
   #track input files
   tar_file_fast(liu_file, path(root, "Liu/Aboveground_Carbon_1993_2012.nc")),
@@ -34,12 +39,12 @@ tar_plan(
   tar_files(ltgnn_paths, fs::dir_ls(path(root, "LT_GNN"), glob = "*.zip"), format = "file_fast"),
   
   #track output files
-  tar_file_fast(liu, clean_liu(input = liu_file)),
-  tar_file_fast(xu, clean_xu(input = xu_file)),
-  tar_file_fast(chopping, clean_chopping(input = chopping_file)),
-  tar_file_fast(gedi, clean_gedi(input = gedi_file)),
-  tar_file_fast(menlove, clean_menlove(input = menlove_file)),
+  tar_file_fast(liu, clean_liu(input = liu_file, output = path(root, "AGB_cleaned/liu/liu_1993-2012.tif"))),
+  tar_file_fast(xu, clean_xu(input = xu_file, output = path(root, "AGB_cleaned/xu/xu_2000-2019.tif"))),
+  tar_file_fast(chopping, clean_chopping(input = chopping_file, output = path(root, "AGB_cleaned/chopping/chopping_2000-2021.tif"))),
+  tar_file_fast(gedi, clean_gedi(input = gedi_file, output = path(root, "AGB_cleaned/gedi/gedi_2019-2023.tif"))),
+  tar_file_fast(menlove, clean_menlove(input = menlove_file, output = path(root, "AGB_cleaned/menlove/menlove_2009-2019.tif"))),
   #these iterate over tiles and save output as tiles
-  tar_file_fast(esa, clean_esa(esa_paths), pattern = map(esa_paths)),
-  tar_file_fast(ltgnn, clean_ltgnn(ltgnn_paths), pattern = map(ltgnn_paths))
+  tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
+  tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths))
 )
