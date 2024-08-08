@@ -13,7 +13,7 @@ library(crew)
 # Set target options:
 tar_option_set(
   packages = c("fs", "terra", "ncdf4", "purrr", "stringr"), # Packages that your targets need for their tasks.
-  controller = crew::crew_controller_local(workers = 4, seconds_idle = 60)
+  controller = crew::crew_controller_local(workers = 6, seconds_idle = 60)
 )
 
 # Run the R scripts in the R/ folder with your custom functions:
@@ -27,6 +27,7 @@ tar_plan(
   tar_file_fast(chopping_file, path(root, "Chopping/MISR_agb_estimates_20002021.tif")),
   tar_file_fast(gedi_file, path(root, "GEDI_L4B_v2.1/data/GEDI04_B_MW019MW223_02_002_02_R01000M_MU.tif")),
   tar_file_fast(menlove_file, path(root, "Menlove/data/")),
+  tar_file_fast(hfbs_file, path(root, "Harmonized Forest Biomass Spawn/tif/aboveground_biomass_carbon_2010.tif")),
   #these ones come as multiple files and need some special handling to iterate over each tile
   tar_target(esa_paths_files, get_esa_paths(), iteration = "list"),
   tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
