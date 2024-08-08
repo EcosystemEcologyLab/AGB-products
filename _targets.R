@@ -28,7 +28,7 @@ tar_plan(
   tar_file_fast(gedi_file, path(root, "GEDI_L4B_v2.1/data/GEDI04_B_MW019MW223_02_002_02_R01000M_MU.tif")),
   tar_file_fast(menlove_file, path(root, "Menlove/data/")),
   #these ones come as multiple files and need some special handling to iterate over each tile
-  tar_target(esa_paths_files, get_esa_paths(), iteration = "list"),
+  tar_target(esa_paths_files, get_esa_paths(root), iteration = "list"),
   tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
   tar_files(ltgnn_paths, fs::dir_ls(path(root, "LT_GNN"), glob = "*.zip"), format = "file_fast"),
   

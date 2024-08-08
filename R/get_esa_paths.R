@@ -11,8 +11,8 @@
 #' @return a list of file paths
 #'
 #' @examples
-get_esa_paths <- function(esa_dir = "/Volumes/moore/ESA_CCI") {
-  files <- fs::path(esa_dir) |> fs::dir_ls(glob = "*.tif*") 
+get_esa_paths <- function(root = "/Volumes/moore/", esa_dir = "ESA_CCI") {
+  files <- fs::path(root, esa_dir) |> fs::dir_ls(glob = "*.tif*") 
   
   #sort files by tile
   tiles <- files |> stringr::str_extract("(N|S)\\d+(W|E)\\d+") |> unique()
