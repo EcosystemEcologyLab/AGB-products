@@ -7,13 +7,13 @@
 library(targets)
 library(tarchetypes)
 library(fs)
-library(reticulate)
+# library(reticulate)
 library(crew)
 
 # Set target options:
 tar_option_set(
   packages = c("fs", "terra", "ncdf4", "purrr", "stringr"), # Packages that your targets need for their tasks.
-  controller = crew::crew_controller_local(workers = 6, seconds_idle = 60)
+  controller = crew::crew_controller_local(workers = 4, seconds_idle = 60)
 )
 
 # Run the R scripts in the R/ folder with your custom functions:
@@ -37,7 +37,10 @@ tar_plan(
   tar_target(esa_paths_files, get_esa_paths(path(root, "AGB_raw")), iteration = "list"),
   tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
   tar_files(ltgnn_paths, fs::dir_ls(path(root, "AGB_raw", "LT_GNN"), glob = "*.zip"), format = "file_fast"),
-  tar_files(gfw_paths, fs::dir_ls(fs::path(root, "AGB_raw/GFW"), glob = "*.tif"), format = "file_fast"),
+  tar_file_fast(gfw_data, path(root, "AGB_raw", "GFW/Aboveground_Live_Woody_Biomass_Density.csv"),
+                description = "metadata CSV"),
+  tar_target(gfw_urls, make_gfw_urls(gfw_data),
+             description = "named vector of URLs"),
   
   #track output files
   tar_file_fast(liu, clean_liu(input = liu_file, output = path(root, "AGB_cleaned/liu/liu_1993-2012.tif"))),
@@ -45,9 +48,9 @@ tar_plan(
   tar_file_fast(chopping, clean_chopping(input = chopping_file, output = path(root, "AGB_cleaned/chopping/chopping_2000-2021.tif"))),
   tar_file_fast(gedi, clean_gedi(input = gedi_file, output = path(root, "AGB_cleaned/gedi/gedi_2019-2023.tif"))),
   tar_file_fast(menlove, clean_menlove(input = menlove_file, output = path(root, "AGB_cleaned/menlove/menlove_2009-2019.tif"))),
-  tar_file_fast(hbfs, clean_hfbs(input = hfbs_file, output = path(root, "AGB_cleaned/hfbs/hfbs_2010.tif"))),
+  tar_file_fast(hfbs, clean_hfbs(input = hfbs_file, output = path(root, "AGB_cleaned/hfbs/hfbs_2010.tif"))),
   #these iterate over tiles and save output as tiles
   tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
   tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
-  tar_file_fast(gfw, clean_gfw(input = gfw_paths, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_paths))
+  tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls))
 )
