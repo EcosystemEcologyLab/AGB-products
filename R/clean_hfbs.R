@@ -3,5 +3,7 @@ clean_hfbs <- function(input = "/Volumes/moore/Harmonized Forest Biomass Spawn/t
   hfbs <- terra::rast(input)
   names(hfbs) <- 2010
   fs::dir_create(fs::path_dir(output))
-  writeRaster(hfbs, output, filetype = "COG")
+  writeRaster(hfbs, output, filetype = "COG", overwrite = TRUE)
+  #return
+  output
 }

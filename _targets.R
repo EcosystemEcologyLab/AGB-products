@@ -27,16 +27,17 @@ root <- "//snow.snrenet.arizona.edu/projects/moore"
 
 tar_plan(
   #track input files
-  tar_file_fast(liu_file, path(root, "Liu/Aboveground_Carbon_1993_2012.nc")),
-  tar_file_fast(xu_file, path(root, "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif")),
-  tar_file_fast(chopping_file, path(root, "Chopping/MISR_agb_estimates_20002021.tif")),
-  tar_file_fast(gedi_file, path(root, "GEDI_L4B_v2.1/data/GEDI04_B_MW019MW223_02_002_02_R01000M_MU.tif")),
-  tar_file_fast(menlove_file, path(root, "Menlove/data/")),
-  tar_file_fast(hfbs_file, path(root, "Harmonized Forest Biomass Spawn/tif/aboveground_biomass_carbon_2010.tif")),
+  tar_file_fast(liu_file, path(root, "AGB_raw", "Liu/Aboveground_Carbon_1993_2012.nc")),
+  tar_file_fast(xu_file, path(root, "AGB_raw", "Xu/test10a_cd_ab_pred_corr_2000_2019_v2.tif")),
+  tar_file_fast(chopping_file, path(root, "AGB_raw", "Chopping/MISR_agb_estimates_20002021.tif")),
+  tar_file_fast(gedi_file, path(root, "AGB_raw", "GEDI_L4B_v2.1/data/GEDI04_B_MW019MW223_02_002_02_R01000M_MU.tif")),
+  tar_file_fast(menlove_file, path(root, "AGB_raw", "Menlove/data/")),
+  tar_file_fast(hfbs_file, path(root, "AGB_raw", "Harmonized Forest Biomass Spawn/tif/aboveground_biomass_carbon_2010.tif")),
   #these ones come as multiple files and need some special handling to iterate over each tile
-  tar_target(esa_paths_files, get_esa_paths(root), iteration = "list"),
+  tar_target(esa_paths_files, get_esa_paths(path(root, "AGB_raw")), iteration = "list"),
   tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
-  tar_files(ltgnn_paths, fs::dir_ls(path(root, "LT_GNN"), glob = "*.zip"), format = "file_fast"),
+  tar_files(ltgnn_paths, fs::dir_ls(path(root, "AGB_raw", "LT_GNN"), glob = "*.zip"), format = "file_fast"),
+  tar_files(gfw_paths, fs::dir_ls(fs::path(root, "AGB_raw/GFW"), glob = "*.tif"), format = "file_fast"),
   
   #track output files
   tar_file_fast(liu, clean_liu(input = liu_file, output = path(root, "AGB_cleaned/liu/liu_1993-2012.tif"))),
@@ -44,7 +45,9 @@ tar_plan(
   tar_file_fast(chopping, clean_chopping(input = chopping_file, output = path(root, "AGB_cleaned/chopping/chopping_2000-2021.tif"))),
   tar_file_fast(gedi, clean_gedi(input = gedi_file, output = path(root, "AGB_cleaned/gedi/gedi_2019-2023.tif"))),
   tar_file_fast(menlove, clean_menlove(input = menlove_file, output = path(root, "AGB_cleaned/menlove/menlove_2009-2019.tif"))),
+  tar_file_fast(hbfs, clean_hfbs(input = hfbs_file, output = path(root, "AGB_cleaned/hfbs/hfbs_2010.tif"))),
   #these iterate over tiles and save output as tiles
   tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
-  tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths))
+  tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
+  tar_file_fast(gfw, clean_gfw(input = gfw_paths, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_paths))
 )
