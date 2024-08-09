@@ -22,7 +22,7 @@ clean_hfbs <- function(input = "/Volumes/moore/Harmonized Forest Biomass Spawn/t
   units(hfbs) <- "Mg/ha"
   
   #write out with scale factor of 0.1 to convert to unsigned integers and save disk space
-  writeRaster(hfbs, output, filetype = "COG", scale = 0.1, datatype = "INT4U", overwrite = TRUE)
+  writeRaster(hfbs, output, filetype = "COG", scale = 0.1, datatype = datatype(hfbs_raw), overwrite = TRUE)
   #return
   output
 }
