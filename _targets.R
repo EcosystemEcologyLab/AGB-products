@@ -37,6 +37,10 @@ tar_plan(
   tar_target(esa_paths_files, get_esa_paths(path(root, "AGB_raw")), iteration = "list"),
   tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
   tar_files(ltgnn_paths, fs::dir_ls(path(root, "AGB_raw", "LT_GNN"), glob = "*.zip"), format = "file_fast"),
+  tar_files(nbcd_paths,
+            fs::dir_ls(path(root, "AGB_raw", "Natl Biomass Carbon Dataset/NBCD2000_v2_1161/data"),
+                       regexp =  "NBCD_MZ\\d{2}_FIA_ALD_biomass.tgz$"),
+            format = "file_fast"),
   tar_file_fast(gfw_data, path(root, "AGB_raw", "GFW/Aboveground_Live_Woody_Biomass_Density.csv"),
                 description = "metadata CSV"),
   tar_target(gfw_urls, make_gfw_urls(gfw_data),
@@ -52,5 +56,6 @@ tar_plan(
   #these iterate over tiles and save output as tiles
   tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
   tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
+  tar_file_fast(nbcd, clean_nbcd(input = nbcd_paths, output = path(root, "AGB_cleaned/nbcd/")), pattern = map(nbcd_paths)),
   tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls))
 )
