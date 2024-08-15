@@ -13,7 +13,11 @@ library(crew)
 # Set target options:
 tar_option_set(
   packages = c("fs", "terra", "ncdf4", "purrr", "stringr"), # Packages that your targets need for their tasks.
-  controller = crew::crew_controller_local(workers = 2, seconds_idle = 60)
+  controller = crew::crew_controller_local(
+    workers = 2,
+    seconds_idle = 60,
+    tasks_max = 10 #this prevents tempdir() from filling up too much maybe?
+  )
 )
 
 # Run the R scripts in the R/ folder with your custom functions:
