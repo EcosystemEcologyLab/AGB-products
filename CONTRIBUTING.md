@@ -73,6 +73,9 @@ See other examples in `R/`.
 
 ### Python
 
+Optionally, functions to wrangle data can be written in Python, although this takes a bit more setup.
+Start by creating a virtual environment and tracking Python dependencies with `renv` by running `renv::use_python(name = ".venv")` (see more about this workflow in the [renv documentation](https://rstudio.github.io/renv/reference/use_python.html)).
+
 If you write a wrangling function in Python, follow the same guidelines.
 Here's the equivalent python version of the above function using the `rioxarray` library.
 
