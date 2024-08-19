@@ -12,7 +12,7 @@ library(crew)
 
 # Set target options:
 tar_option_set(
-  packages = c("fs", "terra", "ncdf4", "purrr", "stringr"), # Packages that your targets need for their tasks.
+  packages = c("fs", "terra", "ncdf4", "purrr", "stringr", "xml2"), # Packages that your targets need for their tasks.
   controller = crew::crew_controller_local(
     workers = 2,
     seconds_idle = 60,
@@ -49,6 +49,7 @@ tar_plan(
                 description = "metadata CSV"),
   tar_target(gfw_urls, make_gfw_urls(gfw_data),
              description = "named vector of URLs"),
+  tar_target(icesat_urls, make_icesat_urls(fs::path(root, "AGB_raw/Boreal_AGB_Density_ICESat2/download_links.html"))),
   
   #track output files
   tar_file_fast(liu, clean_liu(input = liu_file, output = path(root, "AGB_cleaned/liu/liu_1993-2012.tif"))),
@@ -61,5 +62,6 @@ tar_plan(
   tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
   tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
   tar_file_fast(nbcd, clean_nbcd(input = nbcd_paths, output = path(root, "AGB_cleaned/nbcd/")), pattern = map(nbcd_paths)),
-  tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls))
+  tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls)),
+  tar_file_fast(icesat, clean_icesat(input_url = icesat_urls, output = path(root, "AGB_cleaned/icesat/")), pattern = map(icesat_urls))
 )
