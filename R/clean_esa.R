@@ -1,38 +1,27 @@
 #' Pre-process ESA CCI data
 #'
-#' To be used on a single tile at a time, for example, in conjunction with the
-#' list outupt by `get_esa_paths()` using dynamic branching in `targets`.
+#' Reads in yearly global .nc files, stacks them, and outputs as tiled
+#' cloud-optimized geotiffs
 #'
-#' @param input character vector of file paths corresponding to a single tile
+#' @param input character vector of file paths corresponding to global .nc files
+#'   for each year
 #' @param output path to output directory
 #'
-#' @return output file name
+#' @return output file path
 #' 
-clean_esa <- function(
-    input,
-    output = "/Volumes/moore/AGB_cleaned/esa_cci/"
-) {
+clean_esa <- function(input,
+                      output = "/Volumes/moore/AGB_clean/esa/") {
+  
   fs::dir_create(output)
+  esa_list <- purrr::map(input, \(x) rast(x, lyrs = "agb"))
   
-  esa_tile <- terra::rast(input) #input is a vector of file paths for each year in a tile
+  esa <- esa_list |> rast()
+  names(esa) <- stringr::str_extract(time(esa), "^\\d{4}")
+  varnames(esa) <- "AGB"
+  esa
   
-  terra::units(esa_tile) <- "Mg/ha"
-  terra::varnames(esa_tile) <- "AGB"
-  names(esa_tile) <- c(2010, 2017, 2018, 2019, 2020) #TODO should really do this from file names instead
+  outpath <- path(output, "esa_2010.2017-2020_.tif") #will have tile number appended to it by makeTiles
   
-  # Write tile to COG
-  ## construct file name
-  tile_name <- stringr::str_extract(input, "(N|S)\\d+(W|E)\\d+") |> unique()
-  stopifnot(length(tile_name) == 1)
-  
-  outpath <- 
-    fs::path(
-      output,
-      paste0(paste("esa.cci", tile_name, "2010.2017-2020", sep = "_"), ".tif")
-    )
-  
-  # Write COG
-  terra::writeRaster(esa_tile, outpath, filetype = "COG", overwrite = TRUE)
-  #return file name
-  outpath
+  makeTiles(esa, terra::fileBlocksize(esa)[1,], filename = outpath, filetype = "COG", overwrite = TRUE)
+  #makeTiles returns file paths
 }
