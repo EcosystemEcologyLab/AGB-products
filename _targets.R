@@ -7,7 +7,6 @@
 library(targets)
 library(tarchetypes)
 library(fs)
-# library(reticulate)
 library(crew)
 
 # Set target options:
@@ -37,9 +36,8 @@ tar_plan(
   tar_file_fast(gedi_file, path(root, "AGB_raw", "GEDI_L4B_v2.1/data/GEDI04_B_MW019MW223_02_002_02_R01000M_MU.tif")),
   tar_file_fast(menlove_file, path(root, "AGB_raw", "Menlove/data/")),
   tar_file_fast(hfbs_file, path(root, "AGB_raw", "Harmonized Forest Biomass Spawn/tif/aboveground_biomass_carbon_2010.tif")),
-  #these ones come as multiple files and need some special handling to iterate over each tile
-  tar_target(esa_paths_files, get_esa_paths(path(root, "AGB_raw")), iteration = "list"),
-  tar_target(esa_paths, esa_paths_files, pattern = map(esa_paths_files), format = "file_fast"),
+  #these ones come as multiple files and need some special handling
+  tar_file_fast(esa_paths, fs::dir_ls(path(root, "AGB_raw/ESA_CCI_global/"), glob = "*.nc")),
   tar_files(ltgnn_paths, fs::dir_ls(path(root, "AGB_raw", "LT_GNN"), glob = "*.zip"), format = "file_fast"),
   tar_files(nbcd_paths,
             fs::dir_ls(path(root, "AGB_raw", "Natl Biomass Carbon Dataset/NBCD2000_v2_1161/data"),
@@ -50,7 +48,7 @@ tar_plan(
   tar_target(gfw_urls, make_gfw_urls(gfw_data),
              description = "named vector of URLs"),
   tar_target(icesat_urls, make_icesat_urls(fs::path(root, "AGB_raw/Boreal_AGB_Density_ICESat2/download_links.html"))),
-  
+
   #track output files
   tar_file_fast(liu, clean_liu(input = liu_file, output = path(root, "AGB_cleaned/liu/liu_1993-2012.tif"))),
   tar_file_fast(xu, clean_xu(input = xu_file, output = path(root, "AGB_cleaned/xu/xu_2000-2019.tif"))),
@@ -58,8 +56,8 @@ tar_plan(
   tar_file_fast(gedi, clean_gedi(input = gedi_file, output = path(root, "AGB_cleaned/gedi/gedi_2019-2023.tif"))),
   tar_file_fast(menlove, clean_menlove(input = menlove_file, output = path(root, "AGB_cleaned/menlove/menlove_2009-2019.tif"))),
   tar_file_fast(hfbs, clean_hfbs(input = hfbs_file, output = path(root, "AGB_cleaned/hfbs/hfbs_2010.tif"))),
-  #these iterate over tiles and save output as tiles
-  tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/")), pattern = map(esa_paths)),
+  #these save output as tiles
+  tar_file_fast(esa, clean_esa(input = esa_paths, output = path(root, "AGB_cleaned/esa_cci/"))),
   tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
   tar_file_fast(nbcd, clean_nbcd(input = nbcd_paths, output = path(root, "AGB_cleaned/nbcd/")), pattern = map(nbcd_paths)),
   tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls)),
