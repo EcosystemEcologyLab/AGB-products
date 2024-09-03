@@ -61,5 +61,16 @@ tar_plan(
   tar_file_fast(ltgnn, clean_ltgnn(input = ltgnn_paths, output = path(root, "AGB_cleaned/lt_gnn/")), pattern = map(ltgnn_paths)),
   tar_file_fast(nbcd, clean_nbcd(input = nbcd_paths, output = path(root, "AGB_cleaned/nbcd/")), pattern = map(nbcd_paths)),
   tar_file_fast(gfw, clean_gfw(input_url = gfw_urls, output = path(root, "AGB_cleaned/gfw/")), pattern = map(gfw_urls)),
-  tar_file_fast(icesat, clean_icesat(input_url = icesat_urls, output = path(root, "AGB_cleaned/icesat/")), pattern = map(icesat_urls))
+  tar_file_fast(icesat, clean_icesat(input_url = icesat_urls, output = path(root, "AGB_cleaned/icesat/")), pattern = map(icesat_urls)),
+  
+  #create vrt files.
+  #These can be used to read in all the tiles as a virtual file system with
+  #terra::vrt("<filename>.vrt"). Downstream {targets} workflows should only have
+  #to track the one vrt file, which will be updated when new tiles are added or
+  #the projetion changes (or any other values tracked in the .vrt file)
+  tar_file(esa_vrt, write_vrt(esa, path(root, "AGB_cleaned/esa_cci/esa_2010.2017-2020.vrt"))),
+  tar_file(ltgnn_vrt, write_vrt(ltgnn, path(root, "AGB_cleaned/lt_gnn/lt.gnn_1990-2017.vrt"))),
+  tar_file(nbcd_vrt, write_vrt(nbcd, path(root, "AGB_cleaned/nbcd/nbcd_2000.vrt"))),
+  tar_file(gfw_vrt, write_vrt(gfw, path(root, "AGB_cleaned/gfw/gfw_2000.vrt"))),
+  tar_file(icesat_vrt, write_vrt(icesat, path(root, "AGB_cleaned/icesat/icesat_2020.vrt")))
 )
