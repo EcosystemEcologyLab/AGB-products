@@ -1,5 +1,15 @@
 
 
+# Above-ground Biomass Raster Pre-Processing
+
+<!-- badges: start -->
+
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
+<!-- badges: end -->
+
 The goal of this repository is to do some light pre-processing to
 above-ground biomass data products and save them to the “snow” server in
 a common format.
@@ -80,3 +90,8 @@ installing the most recent versions of required R packages (the ones in
 `_targets_packages.R`, and then re-initializing `renv` with
 `renv::init()`. However, note that changes in R packages could require
 you to update code in the cleaning functions or in `_targets.R`.
+
+------------------------------------------------------------------------
+
+Developed in collaboration with the University of Arizona [CCT Data
+Science](https://datascience.cct.arizona.edu/) team
